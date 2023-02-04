@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.Constants;
+import frc.robot.Constants.WheelPosition;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -21,6 +23,7 @@ import frc.robot.subsystems.SwerveDrive;
  * project.
  */
 public class Robot extends TimedRobot {
+
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -109,6 +112,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("Drive Left Trigger", controller.getDriveLeftTrigger());
     SmartDashboard.putNumber("Drive Right Trigger", controller.getDriveRightTrigger());
+    SmartDashboard.putNumber("Front Left Encoder Position", drive.getTurnAngle(WheelPosition.FRONT_LEFT));
 
     drive.setDriveVoltage(controller.getDriveLeftStickY() * Constants.MAX_VOLTAGE);
     drive.setTurnVoltage(controller.getDriveRightStickX() * Constants.MAX_VOLTAGE);

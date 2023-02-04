@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.WheelPosition;
+import frc.robot.Constants.CanId;
 
 public class SwerveDrive extends SubsystemBase {
 
@@ -17,9 +19,9 @@ public class SwerveDrive extends SubsystemBase {
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
     
-    frontLeft = new SwerveModule(Constants.CanId.frontLeftDrive.getId(), 
-    Constants.CanId.frontLeftTurn.getId(), 
-    Constants.CanId.frontLeftDrive.isReversed());
+    frontLeft = new SwerveModule(CanId.frontLeftDrive.getId(), 
+      CanId.frontLeftTurn.getId(), 
+      CanId.frontLeftDrive.isReversed());
 
     // FIX ME: INITIALIZE REMAINING DRIVE MODULES
 
@@ -37,5 +39,14 @@ public class SwerveDrive extends SubsystemBase {
 
   public void setTurnVoltage(double volts) {
     frontLeft.setTurnVoltage(volts);
+  }
+
+  
+  public Double getTurnAngle(Constants.WheelPosition position) {
+    Double angle = null;
+    if (position == WheelPosition.FRONT_LEFT) {
+      angle = frontLeft.getTurnAngle();
+    }
+    return angle;
   }
 }

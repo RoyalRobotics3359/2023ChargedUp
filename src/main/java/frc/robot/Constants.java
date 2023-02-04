@@ -21,12 +21,20 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+  // Enumeration of all wheel positions
+  public enum WheelPosition {
+    FRONT_LEFT,
+    FRONT_RIGHT,
+    REAR_LEFT,
+    REAR_RIGHT;
+  }
+
   //  Enumeration of all the CAN devices on the CAN bus
   //
   public enum CanId {
     // motor controllers on 40 amp breaker
     frontLeftDrive(6, false /* FIX ME */),
-    frontLeftTurn(1, false  /* FIX ME */);
+    frontLeftTurn(3, false  /* FIX ME */);
     
     private final int id;
     private final boolean reversed;
@@ -118,5 +126,5 @@ public final class Constants {
   public final static double TURN_ENCODER_ROTATIONS_TO_RAD = TURN_MOTOR_GEAR_RATIO * 2.0 * Math.PI;
   public final static double DRIVE_ENCODER_RPM_TO_RAD_PER_SEC = DRIVE_ENCODER_ROTATIONS_TO_METERS / 60.0;
   public final static double TURN_ENCODER_RPM_TO_RAD_PER_SEC = TURN_ENCODER_ROTATIONS_TO_RAD / 60.0;
-
+  public final static int ENCODER_COUNTS_PER_REVOLUTION = 4096;
 }

@@ -4,9 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.SwerveDrive;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -19,7 +25,11 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  private OperatorConsole console;
+  private OperatorConsole controller;
+
+  private Lights lights;
+
+  private SwerveDrive drive;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -30,7 +40,13 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    console = new OperatorConsole();
+    lights = new Lights();
+    drive = new SwerveDrive();
+    controller = new OperatorConsole(Constants.DRIVE_CONTROLLER_ID, Constants.GAME_CONTROLLER_ID); 
+    
+    // Sets up drive controller
+    // gameController = new OperatorConsole(Constants.GAME_CONTROLLER_ID); // Sets up controller for playing the game
+    lights.setAllianceColors();
   }
 
   /**
@@ -84,7 +100,19 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    SmartDashboard.putNumber("Swerve Angle", controller.getDriveLeftStickAngle());
+    SmartDashboard.putNumber("Right X", controller.getDriveRightStickX());
+    SmartDashboard.putNumber("Left X", controller.getDriveLeftStickX());
+    SmartDashboard.putNumber("Left Y", controller.getDriveLeftStickY());
+    SmartDashboard.putNumber("Drive Voltage", controller.getDriveLeftStickY() * Constants.MAX_VOLTAGE);
+
+    SmartDashboard.putNumber("Drive Left Trigger", controller.getDriveLeftTrigger());
+    SmartDashboard.putNumber("Drive Right Trigger", controller.getDriveRightTrigger());
+
+    drive.setDriveVoltage(controller.getDriveLeftStickY() * Constants.MAX_VOLTAGE);
+    drive.setTurnVoltage(controller.getDriveRightStickX() * Constants.MAX_VOLTAGE);
+  }
 
   @Override
   public void testInit() {

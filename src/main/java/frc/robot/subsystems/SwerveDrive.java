@@ -41,7 +41,10 @@ public class SwerveDrive extends SubsystemBase {
     frontLeft.setTurnVoltage(volts);
   }
 
-  
+  public void setTurnAngle(double angle) {
+    frontLeft.setTurnAngle(angle);
+  }
+
   public Double getTurnAngle(Constants.WheelPosition position) {
     Double angle = null;
     if (position == WheelPosition.FRONT_LEFT) {

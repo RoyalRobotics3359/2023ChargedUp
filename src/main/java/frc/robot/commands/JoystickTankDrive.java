@@ -15,8 +15,8 @@ public class JoystickTankDrive extends CommandBase {
   /** Creates a new JoystickTankDrive. */
   public JoystickTankDrive(OperatorConsole OC, TankDrive TD) {
     super();
-    OC = console;
-    TD = drive;
+    console = OC;;
+    drive = TD;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
   }

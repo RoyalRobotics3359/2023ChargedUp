@@ -5,9 +5,11 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,6 +21,10 @@ public class TankDrive extends SubsystemBase {
   DifferentialDrive drive;
 
   MotorControllerGroup leftMotorControllerGroup, rightMotorControllerGroup;
+
+  RelativeEncoder leftEncoder, rightEncoder;
+
+  PIDController leftController, rightController;
 
   // PIDCONTROLLER CONSTANTS FOR DRIVE MOTORS
   public final double DRIVE_kP = 0.0;
@@ -46,7 +52,13 @@ public class TankDrive extends SubsystemBase {
     leftMotorControllerGroup.setInverted(false);
     rightMotorControllerGroup.setInverted(true);
 
-    drive = new DifferentialDrive(leftRear, leftFront);
+    drive = new DifferentialDrive(leftMotorControllerGroup, rightMotorControllerGroup);
+
+    leftEncoder = leftFront.getEncoder();
+    rightEncoder = rightFront.getEncoder();
+
+    leftController = new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
+    rightController = new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
 
     leftFront.setIdleMode(IdleMode.kBrake);
     leftRear.setIdleMode(IdleMode.kBrake);

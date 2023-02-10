@@ -53,6 +53,58 @@ public final class Constants {
     }
   }
 
+  /** PID gain values for various PID controllers */
+  public enum Pid {
+
+    DRIVE_MOTOR(0.0, 0.0, 0.0, 0.0),
+    TURN_MOTOR(1.0, 0.001, 0.0, 0.0);
+
+    private final double p;
+    private final double i;
+    private final double d;
+    private final double feedForward;
+
+    private Pid(double kP, double kI, double kD, double kFF) {
+      p = kP;
+      i = kI;
+      d = kD;
+      feedForward = kFF;
+    }
+
+    public double getP() {
+      return p;
+    }
+
+    public double getI() {
+      return i;
+    }
+
+    public double getD() {
+      return d;
+    }
+
+    public double getFeedForward() {
+      return feedForward;
+    }
+  }
+
+  public enum ABS_ENCODER_ID {
+    FRONT_LEFT(0), /* FIX ME */
+    BACK_LEFT(0), /* FIX ME */
+    FRONT_RIGHT(0), /* FIX ME */
+    BACK_RIGHT(0); /* FIX ME */
+
+    private final int id;
+
+    private ABS_ENCODER_ID(int newId) {
+      id = newId;
+    }
+
+    public int getAbsEncoderId() {
+      return id;
+    }
+  }
+
   public enum ControllerId {
 
 
@@ -67,6 +119,7 @@ public final class Constants {
     WIDTH(720),
     FPS(40),
     BRIGHTNESS(50);
+
     private final int val;
 
     private Camera(int value) {
@@ -118,6 +171,8 @@ public final class Constants {
 
   public final static boolean SWERVE_DRIVE_EXISTS = true;
 
+  public final static int PID_LOOP_IDX = 0;
+
   // Swerve Gear Ratios
   public final static double WHEEL_DIAMETER_METERS = Units.inchesToMeters(4.0);
   public final static double DRIVE_MOTOR_GEAR_RATIO = (12/42)*(42/42)*(24/22)*(15/45);
@@ -127,4 +182,5 @@ public final class Constants {
   public final static double DRIVE_ENCODER_RPM_TO_RAD_PER_SEC = DRIVE_ENCODER_ROTATIONS_TO_METERS / 60.0;
   public final static double TURN_ENCODER_RPM_TO_RAD_PER_SEC = TURN_ENCODER_ROTATIONS_TO_RAD / 60.0;
   public final static int ENCODER_COUNTS_PER_REVOLUTION = 4096;
+  public final static int CAN_TIMEOUT = 30;
 }

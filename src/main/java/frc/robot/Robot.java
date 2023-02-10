@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.TankDrive;
 import frc.robot.Constants;
 import frc.robot.Constants.WheelPosition;
 
@@ -32,7 +33,9 @@ public class Robot extends TimedRobot {
 
   private Lights lights;
 
-  private SwerveDrive drive;
+  private SwerveDrive swerveDrive;
+
+  private TankDrive tankDrive;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -44,8 +47,13 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     lights = new Lights();
-    drive = new SwerveDrive();
     controller = new OperatorConsole(Constants.DRIVE_CONTROLLER_ID, Constants.GAME_CONTROLLER_ID); 
+
+    if (Constants.SWERVE_DRIVE_EXISTS) {
+      swerveDrive = new SwerveDrive();
+    } else {
+      tankDrive = new TankDrive();
+    }
     
     // Sets up drive controller
     // gameController = new OperatorConsole(Constants.GAME_CONTROLLER_ID); // Sets up controller for playing the game
@@ -112,10 +120,10 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("Drive Left Trigger", controller.getDriveLeftTrigger());
     SmartDashboard.putNumber("Drive Right Trigger", controller.getDriveRightTrigger());
-    SmartDashboard.putNumber("Front Left Encoder Position", drive.getTurnAngle(WheelPosition.FRONT_LEFT));
+    SmartDashboard.putNumber("Front Left Encoder Position", swerveDrive.getTurnAngle(WheelPosition.FRONT_LEFT));
 
-    drive.setDriveVoltage(controller.getDriveLeftStickY() * Constants.MAX_VOLTAGE);
-    drive.setTurnVoltage(controller.getDriveRightStickX() * Constants.MAX_VOLTAGE);
+    swerveDrive.setDriveVoltage(controller.getDriveLeftStickY() * Constants.MAX_VOLTAGE);
+    swerveDrive.setTurnAngle(controller.getDriveRightStickX() * 1000);
   }
 
   @Override

@@ -40,11 +40,13 @@ public class SwerveModule extends SubsystemBase {
 
   private boolean absEncoderReversed;
 
-  private double turnOffsetInRadians;
+  private double turnOffset;
 
   /** Creates a new SwerveModule. */
-  public SwerveModule(int driveCanId, int turnCanId, boolean driveReversed/*, boolean turnReversed, 
+  public SwerveModule(int driveCanId, int turnCanId, boolean driveReversed, double offset/*, boolean turnReversed, 
   int absEncoderId, double absEncoderOffset, boolean absoluteEncoderReversed*/) {
+
+    turnOffset = offset;
 
     driveMotor = new CANSparkMax(driveCanId, MotorType.kBrushed);
     turnMotor = new TalonSRX(turnCanId);
@@ -63,6 +65,9 @@ public class SwerveModule extends SubsystemBase {
 		turnMotor.config_kP(0, Constants.Pid.TURN_MOTOR.getP(), Constants.CAN_TIMEOUT);
 		turnMotor.config_kI(0, Constants.Pid.TURN_MOTOR.getI(), Constants.CAN_TIMEOUT);
 		turnMotor.config_kD(0, Constants.Pid.TURN_MOTOR.getD(), Constants.CAN_TIMEOUT);
+    turnMotor.setSelectedSensorPosition(offset);
+
+    // setTurnAngle(turnOffset);
 
     // driveEncoder = driveMotor.getEncoder();
     /* FIX ME: Set up turn motor encoder */
@@ -128,8 +133,15 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public double getTurnAngle() {
-    System.out.println(turnMotor.getSensorCollection().getPulseWidthPosition());
     return turnMotor.getSelectedSensorPosition();
+  }
+
+  // public void setTurnZeroPosition() {
+  //   turnMotor.set(TalonSRXControlMode.Position, 0.0);
+  // }
+
+  public void applyAngleOffset(double theta) {
+    turnMotor.set(TalonSRXControlMode.Position, theta);
   }
 
   public static InvertType turnIsReversed(boolean isReversed) {

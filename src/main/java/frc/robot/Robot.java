@@ -112,7 +112,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    SmartDashboard.putNumber("Swerve Angle", controller.getDriveLeftStickAngle());
+    SmartDashboard.putNumber("Joystick Angle", controller.getDriveLeftStickAngle());
+    // SmartDashboard.putNumber("Swerve Angle Rad", controller.convertAngleToRadians());
     SmartDashboard.putNumber("Right X", controller.getDriveRightStickX());
     SmartDashboard.putNumber("Left X", controller.getDriveLeftStickX());
     SmartDashboard.putNumber("Left Y", controller.getDriveLeftStickY());
@@ -122,8 +123,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Drive Right Trigger", controller.getDriveRightTrigger());
     SmartDashboard.putNumber("Front Left Encoder Position", swerveDrive.getTurnAngle(WheelPosition.FRONT_LEFT));
 
-    swerveDrive.setDriveVoltage(controller.getDriveLeftStickY() * Constants.MAX_VOLTAGE);
+    swerveDrive.setDriveVoltage(controller.driveMotorSpeed() * Constants.MAX_VOLTAGE);
     swerveDrive.setTurnAngle(controller.getDriveRightStickX() * 1000);
+    // swerveDrive.setTurnAngle(controller.degrees2ticks());
   }
 
   @Override

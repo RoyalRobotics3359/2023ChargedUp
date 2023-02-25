@@ -53,6 +53,20 @@ public final class Constants {
     }
   }
 
+  public enum TurnOffset {
+    FRONT_LEFT_OFFSET(-120);
+
+    private final double offset;
+
+    private TurnOffset(double ofst) {
+      offset = ofst;
+    }
+
+    public double getOffset() {
+      return offset;
+    }
+  }
+
   /** PID gain values for various PID controllers */
   public enum Pid {
 

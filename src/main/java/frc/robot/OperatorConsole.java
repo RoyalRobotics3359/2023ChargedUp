@@ -91,18 +91,31 @@ public class OperatorConsole {
         return driveRightStickX;
     }
 
+    public double driveMotorSpeed() {
+        double speed = Math.sqrt(Math.pow(getDriveLeftStickY(), 2) + Math.pow(getDriveLeftStickX(), 2));
+        return speed;
+    }
+
     // Retruns angle of Dpad on driveController
     public int getDriveDpadAngle() {
         int driveDpadAngle = driveController.getPOV();
         return driveDpadAngle;
     }
 
+    public static double applyDeadband(double a) {
+        double val = a;
+        if (a < Constants.CONTROLLER_DEADBAND && a > -1.0 * Constants.CONTROLLER_DEADBAND) {
+            val = 0;
+        }
+        return val;
+    }
+
     // Returns angle of left joystick
     public double getDriveLeftStickAngle() {
         // This is measured in degrees
         double angle;
-        double x = driveController.getLeftX();
-        double y = -1.0 * driveController.getLeftY();
+        double x = applyDeadband(driveController.getLeftX());
+        double y = applyDeadband(-1.0 * driveController.getLeftY());
         
         if (x < 0 && y < 0) {
             angle = Math.atan2(-1.0 * y,-1.0 * x) * (180.0/Math.PI);
@@ -119,8 +132,18 @@ public class OperatorConsole {
         } else if (angle == -0) {
             angle *= -1.0;
         } else {}
-
+        System.out.printf("X: %4.2f,  Y: %4.2f, Angle: %4.2f\n", x, y, angle);
         return angle;
+    }
+    
+    public double convertAngleToRadians() {
+        double angle = getDriveLeftStickAngle() * (Math.PI/180.0);
+        return angle;
+    }
+
+    public double degrees2ticks() {
+        double ticks = getDriveLeftStickAngle() * (4096.0/360.0);
+        return ticks;
     }
 
     public double getDriveLeftTrigger() {

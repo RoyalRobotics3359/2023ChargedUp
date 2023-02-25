@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.WheelPosition;
@@ -21,7 +24,7 @@ public class SwerveDrive extends SubsystemBase {
     
     frontLeft = new SwerveModule(CanId.frontLeftDrive.getId(), 
       CanId.frontLeftTurn.getId(), 
-      CanId.frontLeftDrive.isReversed());
+      CanId.frontLeftDrive.isReversed(), Constants.TurnOffset.FRONT_LEFT_OFFSET.getOffset());
 
     // FIX ME: INITIALIZE REMAINING DRIVE MODULES
 
@@ -44,6 +47,10 @@ public class SwerveDrive extends SubsystemBase {
   public void setTurnAngle(double angle) {
     frontLeft.setTurnAngle(angle);
   }
+
+  // public void applyOffset(double theta) {
+  //   frontleft.set(TalonSRX)
+  // }
 
   public Double getTurnAngle(Constants.WheelPosition position) {
     Double angle = null;

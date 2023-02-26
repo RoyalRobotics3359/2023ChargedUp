@@ -60,8 +60,8 @@ public class Robot extends TimedRobot {
 
     // CommandScheduler.getInstance().setDefaultCommand(hand, new OpenHand(hand, console));
 
-    console.getDriveAButton().whenHeld(new OpenHand(hand, console, lights));
-    console.getDriveBButton().whenHeld(new CloseHand(hand, console, lights));
+    console.getGameAButton().whenHeld(new OpenHand(hand, console, lights));
+    console.getGameBButton().whenHeld(new CloseHand(hand, console, lights));
   }
 
   /**

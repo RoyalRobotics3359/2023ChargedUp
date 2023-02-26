@@ -36,7 +36,7 @@ public class Elbow extends SubsystemBase {
   }
 
   public void rotateDown() {
-    elbowMotor.set(TalonSRXControlMode.PercentOutput, Constants.ELBOW_SPEED);
+    elbowMotor.set(TalonSRXControlMode.PercentOutput, -1.0 * Constants.ELBOW_SPEED);
   }
 
   public void motorStop() {

@@ -46,6 +46,10 @@ public class Lights {
         leds.set(Constants.LED_COLORS.TEAM.getColor());
     }
 
+    public void setColorOff() {
+        leds.set(0.0);
+    }
+
     public void setAllianceColors() {
         if (Constants.TEAM.equalsIgnoreCase("blue")) {
             leds.set(Constants.LED_COLORS.BLUE.getColor());
@@ -54,5 +58,4 @@ public class Lights {
             leds.set(Constants.LED_COLORS.RED.getColor());
         }
     }
-
 }

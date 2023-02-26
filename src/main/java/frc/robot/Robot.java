@@ -4,18 +4,16 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.SwerveDrive;
-import frc.robot.subsystems.TankDrive;
-import frc.robot.Constants;
-import frc.robot.Constants.WheelPosition;
+import frc.robot.commands.OpenHand;
+import frc.robot.commands.CloseHand;
+import frc.robot.commands.JoystickDrive;
+import frc.robot.commands.OperateLift;
+import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Hand;
+import frc.robot.subsystems.Lift;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -25,39 +23,45 @@ import frc.robot.Constants.WheelPosition;
  */
 public class Robot extends TimedRobot {
 
-  private Command m_autonomousCommand;
-
-  private RobotContainer m_robotContainer;
-
-  private OperatorConsole controller;
-
-  private Lights lights;
-
-  private SwerveDrive swerveDrive;
-
-  private TankDrive tankDrive;
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+
+  // Subsytems
+  private Drive drive;
+  private OperatorConsole console;
+  private Lift lift;
+  private Hand hand;
+
+  //  Commands
+
+  //  Other
+  private Lights lights;
+  private Camera camera;
+
   @Override
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
-    lights = new Lights();
-    controller = new OperatorConsole(Constants.DRIVE_CONTROLLER_ID, Constants.GAME_CONTROLLER_ID); 
 
-    if (Constants.SWERVE_DRIVE_EXISTS) {
-      swerveDrive = new SwerveDrive();
-    } else {
-      tankDrive = new TankDrive();
-    }
-    
-    // Sets up drive controller
-    // gameController = new OperatorConsole(Constants.GAME_CONTROLLER_ID); // Sets up controller for playing the game
-    lights.setAllianceColors();
+    drive = new Drive();
+    lights = new Lights();
+    console = new OperatorConsole();
+    lift = new Lift();
+    hand = new Hand(lights);
+    camera = new Camera();
+
+    lights.setColorPurple();
+
+    CommandScheduler.getInstance().setDefaultCommand(drive, new JoystickDrive(drive, console));
+
+    CommandScheduler.getInstance().setDefaultCommand(lift, new OperateLift(lift, console));
+
+    // CommandScheduler.getInstance().setDefaultCommand(hand, new OpenHand(hand, console));
+
+    console.getDriveAButton().whenHeld(new OpenHand(hand, console, lights));
+    console.getDriveBButton().whenHeld(new CloseHand(hand, console, lights));
   }
 
   /**
@@ -88,10 +92,10 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    // // schedule the autonomous command (example)
+    // if (m_autonomousCommand != null) {
+    //   m_autonomousCommand.schedule();
+    // }
   }
 
   /** This function is called periodically during autonomous. */
@@ -104,28 +108,17 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
+    // if (m_autonomousCommand != null) {
+    //   m_autonomousCommand.cancel();
+    // }
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    SmartDashboard.putNumber("Joystick Angle", controller.getDriveLeftStickAngle());
-    // SmartDashboard.putNumber("Swerve Angle Rad", controller.convertAngleToRadians());
-    SmartDashboard.putNumber("Right X", controller.getDriveRightStickX());
-    SmartDashboard.putNumber("Left X", controller.getDriveLeftStickX());
-    SmartDashboard.putNumber("Left Y", controller.getDriveLeftStickY());
-    SmartDashboard.putNumber("Drive Voltage", controller.getDriveLeftStickY() * Constants.MAX_VOLTAGE);
 
-    SmartDashboard.putNumber("Drive Left Trigger", controller.getDriveLeftTrigger());
-    SmartDashboard.putNumber("Drive Right Trigger", controller.getDriveRightTrigger());
-    SmartDashboard.putNumber("Front Left Encoder Position", swerveDrive.getTurnAngle(WheelPosition.FRONT_LEFT));
-
-    swerveDrive.setDriveVoltage(controller.driveMotorSpeed() * Constants.MAX_VOLTAGE);
-    swerveDrive.setTurnAngle(controller.getDriveRightStickX() * 1000);
-    // swerveDrive.setTurnAngle(controller.degrees2ticks());
+    
+    CommandScheduler.getInstance().run();
   }
 
   @Override

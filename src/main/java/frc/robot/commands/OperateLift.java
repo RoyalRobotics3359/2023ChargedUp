@@ -6,14 +6,22 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.SwerveDrive;
+import frc.robot.OperatorConsole;
+import frc.robot.subsystems.Lift;
 
-public class JoystickSwerveDrive extends CommandBase {
-  SwerveDrive drive;
-  /** Creates a new JoystickSwerveDrive. */
-  public JoystickSwerveDrive() {
+public class OperateLift extends CommandBase {
+
+  private Lift lift;
+
+  private OperatorConsole console;
+  
+  private double direction;
+  /** Creates a new OperateLift. */
+  public OperateLift(Lift l, OperatorConsole oc) {
+    lift = l;
+    console = oc;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drive);
+    addRequirements(lift);
   }
 
   // Called when the command is initially scheduled.
@@ -23,9 +31,14 @@ public class JoystickSwerveDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Constants.SWERVE_DRIVE_EXISTS) {
-      
+    if (console.getDriveDpadAngle() == Constants.D_PAD.UP /* FIX ME */) {
+      direction = Constants.LIFT_SPEED;
+    } else if (console.getDriveDpadAngle() == Constants.D_PAD.DOWN /* FIX ME */) {
+      direction = -1.0 * Constants.LIFT_SPEED;
+    } else {
+      direction = 0.0;
     }
+    lift.setPercentPower(direction);
   }
 
   // Called once the command ends or is interrupted.
@@ -37,5 +50,4 @@ public class JoystickSwerveDrive extends CommandBase {
   public boolean isFinished() {
     return false;
   }
-
 }

@@ -5,20 +5,26 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
+import frc.robot.Lights;
 import frc.robot.OperatorConsole;
-import frc.robot.subsystems.TankDrive;
+import frc.robot.subsystems.Hand;
 
-public class JoystickTankDrive extends CommandBase {
-  OperatorConsole console;
-  TankDrive drive;
-  /** Creates a new JoystickTankDrive. */
-  public JoystickTankDrive(OperatorConsole OC, TankDrive TD) {
-    super();
-    console = OC;;
-    drive = TD;
+public class OpenHand extends CommandBase {
+
+  private Hand hand;
+
+  private OperatorConsole console;
+
+  private Lights leds;
+  /** Creates a new ControlHand. */
+  public OpenHand(Hand h, OperatorConsole oc, Lights l) {
+
+    hand = h;
+    console = oc;
+    leds = l;
+    
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drive);
+    addRequirements(hand);
   }
 
   // Called when the command is initially scheduled.
@@ -28,16 +34,15 @@ public class JoystickTankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Constants.TANK_DRIVE_EXISTS) {
-      double leftPower = console.getDriveLeftStickY() * Constants.MAX_SPEED * Constants.MAX_VOLTAGE;
-      double rightPower = console.getDriveLeftStickY() * Constants.MAX_SPEED * Constants.MAX_VOLTAGE;
-      drive.tankDriveVolts(leftPower, rightPower);
-    }
+    hand.openHand();
+    leds.setColorRed();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    hand.motorStop();
+  }
 
   // Returns true when the command should end.
   @Override

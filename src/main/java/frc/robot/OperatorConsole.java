@@ -4,27 +4,22 @@
 
 package frc.robot;
 
-import java.lang.ModuleLayer.Controller;
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.D_PAD;
 
 /** Add your docs here. */
-
-// General class to make a new  Xbox driveController with general nethods for each physical feature on the driveController
-
 public class OperatorConsole {
 
-    
     private XboxController driveController, gameController;
 
     private JoystickButton Drive_A_Button, Drive_B_Button, Drive_X_Button, Drive_Y_Button, Drive_Start_Button, Drive_Back_Button, Drive_Left_Bumper, Drive_Right_Bumper;
     private JoystickButton Game_A_Button, Game_B_Button, Game_X_Button, Game_Y_Button, Game_Start_Button, Game_Back_Button, Game_Left_Bumper, Game_Right_Bumper;
 
     // This constructor has the parameter for the Controller Id a.k.a. its port
-    public OperatorConsole(int driveControllerId, int gameControllerId) {
-        driveController = new XboxController(driveControllerId);
-        gameController = new XboxController(gameControllerId);
+    public OperatorConsole() {
+        driveController = new XboxController(Constants.DRIVE_CONTROLLER_ID);
+        gameController = new XboxController(Constants.GAME_CONTROLLER_ID);
 
         // DRIVE BUTTONS AND TRIGGERS
         Drive_A_Button = new JoystickButton(driveController, XboxController.Button.kA.value);
@@ -91,69 +86,41 @@ public class OperatorConsole {
         return driveRightStickX;
     }
 
-    public double driveMotorSpeed() {
-        double speed = Math.sqrt(Math.pow(getDriveLeftStickY(), 2) + Math.pow(getDriveLeftStickX(), 2));
-        return speed;
-    }
-
     // Retruns angle of Dpad on driveController
-    public int getDriveDpadAngle() {
+    public Constants.D_PAD getDriveDpadAngle() {
         int driveDpadAngle = driveController.getPOV();
-        return driveDpadAngle;
-    }
-
-    public static double applyDeadband(double a) {
-        double val = a;
-        if (a < Constants.CONTROLLER_DEADBAND && a > -1.0 * Constants.CONTROLLER_DEADBAND) {
-            val = 0;
+        Constants.D_PAD state;
+        switch(driveDpadAngle) {
+            case 0:
+                state = D_PAD.UP;
+            case 90:
+                state = D_PAD.RIGHT;
+            case 180:
+                state = D_PAD.DOWN;
+            case 270:
+                state = D_PAD.LEFT;
+            default:
+                state = D_PAD.NO_INPUT;
         }
-        return val;
+        return state;
     }
 
-    // Returns angle of left joystick
-    public double getDriveLeftStickAngle() {
-        // This is measured in degrees
-        double angle;
-        double x = applyDeadband(driveController.getLeftX());
-        double y = applyDeadband(-1.0 * driveController.getLeftY());
-        
-        if (x < 0 && y < 0) {
-            angle = Math.atan2(-1.0 * y,-1.0 * x) * (180.0/Math.PI);
-            angle += 180.0;
-        } else if (x > 0 && y < 0) {
-            angle = Math.atan2(-1.0 * y,-1.0 * x) * (180.0/Math.PI);
-            angle += 180.0;
-        } else {
-            angle = Math.atan2(y,x) * (180.0/Math.PI);
-        }
-
-        if (angle == -180) {
-            angle *= -1.0;
-        } else if (angle == -0) {
-            angle *= -1.0;
-        } else {}
-        System.out.printf("X: %4.2f,  Y: %4.2f, Angle: %4.2f\n", x, y, angle);
-        return angle;
-    }
-    
-    public double convertAngleToRadians() {
-        double angle = getDriveLeftStickAngle() * (Math.PI/180.0);
-        return angle;
-    }
-
-    public double degrees2ticks() {
-        double ticks = getDriveLeftStickAngle() * (4096.0/360.0);
-        return ticks;
-    }
-
-    public double getDriveLeftTrigger() {
+    public boolean getDriveLeftTrigger() {
+        boolean isActive = false;
         double driveLeftTriggerVal = driveController.getRawAxis(XboxController.Axis.kLeftTrigger.value);
-        return driveLeftTriggerVal;
+        if (driveLeftTriggerVal > Constants.CONTROLLER_TRIGGER_DEADBAND) {
+            isActive = true;
+        }
+        return isActive;
     }
 
-    public double getDriveRightTrigger() {
+    public boolean getDriveRightTrigger() {
+        boolean isActive = false;
         double driveRightTriggerVal = driveController.getRawAxis(XboxController.Axis.kRightTrigger.value);
-        return driveRightTriggerVal;
+        if (driveRightTriggerVal > Constants.CONTROLLER_TRIGGER_DEADBAND) {
+            isActive = true;
+        }
+        return isActive;
     }
 
     public JoystickButton getDriveAButton() {
@@ -229,19 +196,40 @@ public class OperatorConsole {
     }
 
     // Retruns angle of Dpad on gameController
-    public int getGameDpadAngle() {
+    public Constants.D_PAD getGameDpadAngle() {
         int gameDpadAngle = gameController.getPOV();
-        return gameDpadAngle;
+        Constants.D_PAD state;
+        switch(gameDpadAngle) {
+            case 0:
+                state = D_PAD.UP;
+            case 90:
+                state = D_PAD.RIGHT;
+            case 180:
+                state = D_PAD.DOWN;
+            case 270:
+                state = D_PAD.LEFT;
+            default:
+                state = D_PAD.NO_INPUT;
+        }
+        return state;
     }
 
-    public double getGameLeftTrigger() {
+    public boolean getGameLeftTrigger() {
+        boolean isActive = false;
         double gameLeftTriggerVal = gameController.getRawAxis(XboxController.Axis.kLeftTrigger.value);
-        return gameLeftTriggerVal;
+        if (gameLeftTriggerVal > Constants.CONTROLLER_TRIGGER_DEADBAND) {
+            isActive = true;
+        }
+        return isActive;
     }
 
-    public double getGameRightTrigger() {
+    public boolean getGameRightTrigger() {
+        boolean isActive = false;
         double gameRightTriggerVal = gameController.getRawAxis(XboxController.Axis.kRightTrigger.value);
-        return gameRightTriggerVal;
+        if (gameRightTriggerVal > Constants.CONTROLLER_TRIGGER_DEADBAND) {
+            isActive = true;
+        }
+        return isActive;
     }
 
     public JoystickButton getGameAButton() {
@@ -275,4 +263,5 @@ public class OperatorConsole {
     public JoystickButton getGameRightBumber() {
         return Game_Right_Bumper;
     }
+
 }

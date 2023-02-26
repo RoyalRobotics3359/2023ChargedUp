@@ -8,23 +8,29 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
 public class Camera {
 
-    UsbCamera camera;
-    CvSink sink;
-    CvSource outputStream;
+    private UsbCamera camera;
+
+    private CvSink sink;
+    
+    private CvSource source;
 
     public Camera() {
+        // Enables the camera
         camera = CameraServer.startAutomaticCapture();
 
-        camera.setResolution(Constants.Camera.WIDTH.getValue(), Constants.Camera.HEIGHT.getValue());
-        camera.setBrightness(Constants.Camera.BRIGHTNESS.getValue());
+        // Setting Frames Per Second
+        camera.setFPS(Constants.CAMERA_FPS);
 
-        sink = CameraServer.getVideo();
-        outputStream = CameraServer.putVideo("Camera 1", 0, 0);
+        // Setting up the resolution and brightness of the camera
+        camera.setResolution(Constants.CAMERA_WIDTH, Constants.CAMERA_HEIGHT);
+        
+        // sink = CameraServer.getVideo();
 
-        camera.setFPS(Constants.Camera.FPS.getValue());
+        // source = CameraServer.putVideo("FRC 3359", Constants.CAMERA_WIDTH, Constants.CAMERA_HEIGHT);
     }
 }

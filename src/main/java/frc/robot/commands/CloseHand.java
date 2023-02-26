@@ -4,26 +4,25 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
+import frc.robot.Lights;
 import frc.robot.OperatorConsole;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Hand;
 
-public class JoystickDrive extends CommandBase {
+public class CloseHand extends CommandBase {
 
-  private Drive drive;
-  
+  private Hand hand;
   private OperatorConsole console;
-  
-  /** Creates a new JoystickDrive. */
-  public JoystickDrive(Drive d, OperatorConsole oc) {
+  private Lights leds;
+  /** Creates a new CloseHand. */
+  public CloseHand(Hand h, OperatorConsole oc, Lights l) {
 
-    drive = d;
+    hand = h;
     console = oc;
-    
+    leds = l;
+
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drive);
+    addRequirements(hand);
   }
 
   // Called when the command is initially scheduled.
@@ -33,17 +32,14 @@ public class JoystickDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double leftPower = console.getDriveLeftStickY() * Constants.MAX_VOLTAGE * Constants.MAX_SPEED;
-    double rightPower = console.getDriveRightStickY() * Constants.MAX_VOLTAGE * Constants.MAX_SPEED;
-    drive.setVoltage(leftPower, rightPower);
-    SmartDashboard.putNumber("Left Power", leftPower);
-    SmartDashboard.putNumber("Right Power", rightPower);
+    hand.closeHand();
+    leds.setColorGreen();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drive.motorStop();
+    hand.motorStop();
   }
 
   // Returns true when the command should end.

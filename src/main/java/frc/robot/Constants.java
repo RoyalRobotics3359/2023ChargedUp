@@ -4,10 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.XboxController;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -17,132 +13,42 @@ import edu.wpi.first.wpilibj.XboxController;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
 
-  // Enumeration of all wheel positions
-  public enum WheelPosition {
-    FRONT_LEFT,
-    FRONT_RIGHT,
-    REAR_LEFT,
-    REAR_RIGHT;
-  }
+  public enum Motors {
+    /* Motor(CAN_ID, isReversed) */
+    leftFront(1,false), /* FIX ME */
+    leftBack(6,false), /* FIX ME */
+    rightFront(3,true), /* FIX ME */
+    rightBack(4,true), /* FIX ME */
+    liftMotor(5,false), /* FIX ME */
+    handMotor(2, false), /* FIX ME */
+    wristMotor(7,false), /* FIX ME */
+    elbowMotor(8, false); /* FIX ME */
 
-  //  Enumeration of all the CAN devices on the CAN bus
-  //
-  public enum CanId {
-    // motor controllers on 40 amp breaker
-    frontLeftDrive(6, false /* FIX ME */),
-    frontLeftTurn(3, false  /* FIX ME */);
-    
-    private final int id;
-    private final boolean reversed;
-    
-    private CanId(int newId, boolean rev) {
-      id = newId;
-      reversed = rev;
+
+    private final int CAN_ID;
+    private final boolean isReversed;
+
+    private Motors(int canId, boolean reversed) {
+      CAN_ID = canId;
+      isReversed = reversed;
     }
 
-    public int getId() {
-      return id;
+    public int getCAN_ID() {
+      return CAN_ID;
     }
 
     public boolean isReversed() {
-      return reversed;
+      return isReversed;
     }
   }
 
-  public enum TurnOffset {
-    FRONT_LEFT_OFFSET(-120);
-
-    private final double offset;
-
-    private TurnOffset(double ofst) {
-      offset = ofst;
-    }
-
-    public double getOffset() {
-      return offset;
-    }
-  }
-
-  /** PID gain values for various PID controllers */
-  public enum Pid {
-
-    DRIVE_MOTOR(0.0, 0.0, 0.0, 0.0),
-    TURN_MOTOR(1.0, 0.001, 0.0, 0.0);
-
-    private final double p;
-    private final double i;
-    private final double d;
-    private final double feedForward;
-
-    private Pid(double kP, double kI, double kD, double kFF) {
-      p = kP;
-      i = kI;
-      d = kD;
-      feedForward = kFF;
-    }
-
-    public double getP() {
-      return p;
-    }
-
-    public double getI() {
-      return i;
-    }
-
-    public double getD() {
-      return d;
-    }
-
-    public double getFeedForward() {
-      return feedForward;
-    }
-  }
-
-  public enum ABS_ENCODER_ID {
-    FRONT_LEFT(0), /* FIX ME */
-    BACK_LEFT(0), /* FIX ME */
-    FRONT_RIGHT(0), /* FIX ME */
-    BACK_RIGHT(0); /* FIX ME */
-
-    private final int id;
-
-    private ABS_ENCODER_ID(int newId) {
-      id = newId;
-    }
-
-    public int getAbsEncoderId() {
-      return id;
-    }
-  }
-
-  public enum ControllerId {
-
-
-  }
-
-  public enum Pneumatics {
-
-  }
-
-  public enum Camera {
-    HEIGHT(360),
-    WIDTH(720),
-    FPS(40),
-    BRIGHTNESS(50);
-
-    private final int val;
-
-    private Camera(int value) {
-      val = value;
-    }
-
-    public int getValue() {
-      return val;
-    }
+  public enum D_PAD {
+    UP,
+    DOWN,
+    RIGHT,
+    LEFT,
+    NO_INPUT;
   }
 
   public enum LED_COLORS {
@@ -167,6 +73,7 @@ public final class Constants {
   }
 
   public final static int DRIVE_CONTROLLER_ID = 0;
+
   public final static int GAME_CONTROLLER_ID = 1;
 
   public final static double CONTROLLER_DEADBAND = 0.10;
@@ -183,18 +90,21 @@ public final class Constants {
 
   public final static boolean TANK_DRIVE_EXISTS = false;
 
-  public final static boolean SWERVE_DRIVE_EXISTS = true;
+  public final static double LIFT_SPEED = 0.0;
 
-  public final static int PID_LOOP_IDX = 0;
+  public final static double POV_DEVIATION = 15.0;
 
-  // Swerve Gear Ratios
-  public final static double WHEEL_DIAMETER_METERS = Units.inchesToMeters(4.0);
-  public final static double DRIVE_MOTOR_GEAR_RATIO = (12/42)*(42/42)*(24/22)*(15/45);
-  public final static double TURN_MOTOR_GEAR_RATIO = (8/34)*(34/24)*(24/72);
-  public final static double DRIVE_ENCODER_ROTATIONS_TO_METERS = DRIVE_MOTOR_GEAR_RATIO * Math.PI * WHEEL_DIAMETER_METERS;
-  public final static double TURN_ENCODER_ROTATIONS_TO_RAD = TURN_MOTOR_GEAR_RATIO * 2.0 * Math.PI;
-  public final static double DRIVE_ENCODER_RPM_TO_RAD_PER_SEC = DRIVE_ENCODER_ROTATIONS_TO_METERS / 60.0;
-  public final static double TURN_ENCODER_RPM_TO_RAD_PER_SEC = TURN_ENCODER_ROTATIONS_TO_RAD / 60.0;
-  public final static int ENCODER_COUNTS_PER_REVOLUTION = 4096;
-  public final static int CAN_TIMEOUT = 30;
+  public final static double HAND_SPEED = 0.15;
+
+  public final static double WRIST_SPEED = 0.15; /* FIX ME */
+
+  public final static double ELBOW_SPEED = 0.25; /* FIX ME */
+
+  public final static int CAMERA_HEIGHT = 400;
+
+  public final static int CAMERA_WIDTH = 500;
+
+  public final static int CAMERA_BRIGHTNESS = 50;
+
+  public final static int CAMERA_FPS = 20;
 }

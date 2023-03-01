@@ -33,8 +33,8 @@ public class JoystickDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double leftPower = console.getDriveLeftStickY() * Constants.MAX_VOLTAGE * Constants.MAX_SPEED;
-    double rightPower = console.getDriveRightStickY() * Constants.MAX_VOLTAGE * Constants.MAX_SPEED;
+    double leftPower = console.getDriveLeftStickY() * Constants.MAX_VOLTAGE * Constants.Speeds.maxDriveSpeed.getSpeed();
+    double rightPower = console.getDriveRightStickY() * Constants.MAX_VOLTAGE * Constants.Speeds.maxDriveSpeed.getSpeed();
     drive.setVoltage(leftPower, rightPower);
     SmartDashboard.putNumber("Left Power", leftPower);
     SmartDashboard.putNumber("Right Power", rightPower);

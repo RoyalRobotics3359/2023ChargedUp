@@ -17,14 +17,13 @@ public final class Constants {
   public enum Motors {
     /* Motor(CAN_ID, isReversed) */
     leftFront(1,false), /* FIX ME */
-    leftBack(6,false), /* FIX ME */
+    leftBack(2,false), /* FIX ME */
     rightFront(3,true), /* FIX ME */
     rightBack(4,true), /* FIX ME */
-    liftMotor(5,false), /* FIX ME */
-    handMotor(2, false), /* FIX ME */
+    handMotor(5,false), /* FIX ME */
+    liftMotor(6, false), /* FIX ME */
     wristMotor(7,false), /* FIX ME */
     elbowMotor(8, false); /* FIX ME */
-
 
     private final int CAN_ID;
     private final boolean isReversed;
@@ -43,12 +42,37 @@ public final class Constants {
     }
   }
 
-  public enum D_PAD {
-    UP,
-    DOWN,
-    RIGHT,
-    LEFT,
-    NO_INPUT;
+  public enum Speeds {
+    maxDriveSpeed(0.7),
+    liftSpeed(0.4), /* FIX ME */
+    handSpeed(0.15),
+    wristSpeed(0.0), /* FIX ME */
+    elbowSpeed(0.0); /* FIX ME */
+
+    private final double speed;
+
+    private Speeds(double s) {
+      speed = s;
+    }
+
+    public double getSpeed() {
+      return speed;
+    }
+  }
+
+  public enum Pneumatics {
+    shoulderOut(0),
+    shoulderIn(1);
+
+    private final int Id;
+
+    private Pneumatics(int id) {
+      Id = id;
+    }
+
+    public int getId() {
+      return Id;
+    }
   }
 
   public enum LED_COLORS {
@@ -86,19 +110,9 @@ public final class Constants {
 
   public final static double MAX_VOLTAGE = 10;
 
-  public final static double MAX_SPEED = 0.7;
-
   public final static boolean TANK_DRIVE_EXISTS = false;
 
-  public final static double LIFT_SPEED = 0.0;
-
   public final static double POV_DEVIATION = 15.0;
-
-  public final static double HAND_SPEED = 0.15;
-
-  public final static double WRIST_SPEED = 0.15; /* FIX ME */
-
-  public final static double ELBOW_SPEED = 0.25; /* FIX ME */
 
   public final static int CAMERA_HEIGHT = 400;
 
@@ -106,5 +120,5 @@ public final class Constants {
 
   public final static int CAMERA_BRIGHTNESS = 50;
 
-  public final static int CAMERA_FPS = 20;
+  public final static int CAMERA_FPS = 15;
 }

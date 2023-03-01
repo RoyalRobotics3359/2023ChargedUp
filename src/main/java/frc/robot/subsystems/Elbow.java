@@ -8,14 +8,21 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Elbow extends SubsystemBase {
 
   private TalonSRX elbowMotor;
+
+  private DoubleSolenoid shoulder;
   /** Creates a new Shoulder. */
   public Elbow() {
+
+    shoulder = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Pneumatics.shoulderOut.getId(), Constants.Pneumatics.shoulderIn.getId());
 
     elbowMotor = new TalonSRX(Constants.Motors.elbowMotor.getCAN_ID());
 
@@ -32,14 +39,27 @@ public class Elbow extends SubsystemBase {
   }
 
   public void rotateUp() {
-    elbowMotor.set(TalonSRXControlMode.PercentOutput, Constants.ELBOW_SPEED);
+    elbowMotor.set(TalonSRXControlMode.PercentOutput, Constants.Speeds.elbowSpeed.getSpeed());
   }
 
   public void rotateDown() {
-    elbowMotor.set(TalonSRXControlMode.PercentOutput, -1.0 * Constants.ELBOW_SPEED);
+    elbowMotor.set(TalonSRXControlMode.PercentOutput, -1.0 * Constants.Speeds.elbowSpeed.getSpeed());
   }
 
   public void motorStop() {
     elbowMotor.set(TalonSRXControlMode.PercentOutput, 0.0);
   }
+
+  public void extendShoulder() {
+    shoulder.set(Value.kForward);
+  }
+
+  public void retractShoulder() {
+    shoulder.set(Value.kReverse);
+  }
+
+  public void turnOffShoulder() {
+    shoulder.set(Value.kOff);
+  }
+
 }

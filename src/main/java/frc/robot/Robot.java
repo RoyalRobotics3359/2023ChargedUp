@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -12,8 +14,10 @@ import frc.robot.commands.CloseHand;
 import frc.robot.commands.JoystickDrive;
 import frc.robot.commands.OperateLift;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Elbow;
 import frc.robot.subsystems.Hand;
 import frc.robot.subsystems.Lift;
+import frc.robot.subsystems.Wrist;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -33,24 +37,36 @@ public class Robot extends TimedRobot {
   private OperatorConsole console;
   private Lift lift;
   private Hand hand;
+  private Elbow elbow;
+  private Wrist wrist;
 
   //  Commands
 
   //  Other
   private Lights lights;
   private Camera camera;
+  private Compressor compressor;
 
   @Override
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
 
+    // Subsystems
     drive = new Drive();
-    lights = new Lights();
     console = new OperatorConsole();
     lift = new Lift();
     hand = new Hand(lights);
+    elbow = new Elbow();
+    wrist = new Wrist();
+
+    // Commands
+
+    // Other
     camera = new Camera();
+    compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+    compressor.enableDigital();
+    lights = new Lights();
 
     lights.setColorPurple();
 
@@ -58,10 +74,11 @@ public class Robot extends TimedRobot {
 
     CommandScheduler.getInstance().setDefaultCommand(lift, new OperateLift(lift, console));
 
-    // CommandScheduler.getInstance().setDefaultCommand(hand, new OpenHand(hand, console));
+    console.getGameAButton().whenHeld(new OpenHand(hand, console, lights)); /* FIX ME: Change from Drive Controller to Game Controller*/
+    console.getGameBButton().whenHeld(new CloseHand(hand, console, lights)); /* FIX ME: Change from Drive Controller to Game Controller*/
 
-    console.getGameAButton().whenHeld(new OpenHand(hand, console, lights));
-    console.getGameBButton().whenHeld(new CloseHand(hand, console, lights));
+    console.getDriveRightBumber().whenPressed(elbow::extendShoulder, elbow);
+    console.getDriveYButton().whenPressed(elbow::retractShoulder, elbow);
   }
 
   /**

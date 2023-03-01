@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.D_PAD;
 
 /** Add your docs here. */
 public class OperatorConsole {
@@ -87,22 +86,9 @@ public class OperatorConsole {
     }
 
     // Retruns angle of Dpad on driveController
-    public Constants.D_PAD getDriveDpadAngle() {
+    public int getDriveDpadAngle() {
         int driveDpadAngle = driveController.getPOV();
-        Constants.D_PAD state;
-        switch(driveDpadAngle) {
-            case 0:
-                state = D_PAD.UP;
-            case 90:
-                state = D_PAD.RIGHT;
-            case 180:
-                state = D_PAD.DOWN;
-            case 270:
-                state = D_PAD.LEFT;
-            default:
-                state = D_PAD.NO_INPUT;
-        }
-        return state;
+        return driveDpadAngle;
     }
 
     public boolean getDriveLeftTrigger() {
@@ -196,22 +182,9 @@ public class OperatorConsole {
     }
 
     // Retruns angle of Dpad on gameController
-    public Constants.D_PAD getGameDpadAngle() {
+    public int getGameDpadAngle() {
         int gameDpadAngle = gameController.getPOV();
-        Constants.D_PAD state;
-        switch(gameDpadAngle) {
-            case 0:
-                state = D_PAD.UP;
-            case 90:
-                state = D_PAD.RIGHT;
-            case 180:
-                state = D_PAD.DOWN;
-            case 270:
-                state = D_PAD.LEFT;
-            default:
-                state = D_PAD.NO_INPUT;
-        }
-        return state;
+        return gameDpadAngle;
     }
 
     public boolean getGameLeftTrigger() {

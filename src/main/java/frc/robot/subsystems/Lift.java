@@ -36,10 +36,14 @@ public class Lift extends SubsystemBase {
   }
 
   public void extendLift() {
-    liftMotor.set(TalonSRXControlMode.PercentOutput, Constants.LIFT_SPEED);
+    liftMotor.set(TalonSRXControlMode.PercentOutput, Constants.Speeds.liftSpeed.getSpeed());
   }
 
   public void retractLift() {
-    liftMotor.set(TalonSRXControlMode.PercentOutput, Constants.LIFT_SPEED);
+    liftMotor.set(TalonSRXControlMode.PercentOutput, -1.0 * Constants.Speeds.liftSpeed.getSpeed());
+  }
+
+  public void motorStop() {
+    liftMotor.set(TalonSRXControlMode.PercentOutput, 0.0);
   }
 }

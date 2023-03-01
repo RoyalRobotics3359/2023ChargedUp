@@ -46,12 +46,12 @@ public class Hand extends SubsystemBase {
   }
 
   public void openHand() {
-    handMotor.set(Constants.HAND_SPEED);
+    handMotor.set(Constants.Speeds.handSpeed.getSpeed());
     System.out.println("Hand.openHand() Encoder: " + handEncoder.getPosition());
   }
 
   public void closeHand() {
-    handMotor.set(-1.0 * Constants.HAND_SPEED);
+    handMotor.set(-1.0 * Constants.Speeds.handSpeed.getSpeed());
     System.out.println("Hand.closeHand() Encoder: " + handEncoder.getPosition());
   }
 

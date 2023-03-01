@@ -15,7 +15,6 @@ public class OperateLift extends CommandBase {
 
   private OperatorConsole console;
   
-  private double direction;
   /** Creates a new OperateLift. */
   public OperateLift(Lift l, OperatorConsole oc) {
     lift = l;
@@ -31,19 +30,20 @@ public class OperateLift extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (console.getDriveDpadAngle() == Constants.D_PAD.UP /* FIX ME */) {
-      direction = Constants.LIFT_SPEED;
-    } else if (console.getDriveDpadAngle() == Constants.D_PAD.DOWN /* FIX ME */) {
-      direction = -1.0 * Constants.LIFT_SPEED;
+    if (console.getDriveDpadAngle() == 0 /* FIX ME: Change from Drive Controller to Game Controller*/) {
+      lift.extendLift();
+    } else if (console.getDriveDpadAngle() == 180 /* FIX ME: Change from Drive Controller to Game Controller*/) {
+      lift.retractLift();
     } else {
-      direction = 0.0;
+      lift.motorStop();
     }
-    lift.setPercentPower(direction);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    lift.motorStop();
+  }
 
   // Returns true when the command should end.
   @Override

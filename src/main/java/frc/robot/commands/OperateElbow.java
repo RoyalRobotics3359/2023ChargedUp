@@ -5,23 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Lights;
-import frc.robot.subsystems.Hand;
 
-public class CloseHand extends CommandBase {
+import frc.robot.OperatorConsole;
+import frc.robot.subsystems.Elbow;
 
-  private Hand hand;
+public class OperateElbow extends CommandBase {
 
-  private Lights leds;
+  private Elbow elbow;
+  private OperatorConsole console;
 
-  /** Creates a new CloseHand. */
-  public CloseHand(Hand h, Lights l) {
+  /** Creates a new OperateElbow. */
+  public OperateElbow(Elbow e, OperatorConsole oc) {
 
-    hand = h;
-    leds = l;
-
+    elbow = e;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(hand);
+    addRequirements(elbow);
   }
 
   // Called when the command is initially scheduled.
@@ -31,14 +29,19 @@ public class CloseHand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    hand.closeHand();
-    leds.setColorGreen();
+    if (console.getDriveLeftStickY() != 0.0 && console.getDriveLeftStickY() > 0.0) {
+      elbow.rotateUp();
+    } else if (console.getDriveLeftStickY() != 0.0 && console.getDriveLeftStickY() < 0.0){
+      elbow.rotateDown();
+    } else {
+      elbow.motorStop();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    hand.motorStop();
+    elbow.motorStop();
   }
 
   // Returns true when the command should end.

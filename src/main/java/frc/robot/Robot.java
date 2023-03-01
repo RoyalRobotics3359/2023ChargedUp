@@ -74,11 +74,11 @@ public class Robot extends TimedRobot {
 
     CommandScheduler.getInstance().setDefaultCommand(lift, new OperateLift(lift, console));
 
-    console.getGameAButton().whenHeld(new OpenHand(hand, console, lights)); /* FIX ME: Change from Drive Controller to Game Controller*/
-    console.getGameBButton().whenHeld(new CloseHand(hand, console, lights)); /* FIX ME: Change from Drive Controller to Game Controller*/
+    console.getGameAButton().whenHeld(new OpenHand(hand, lights)); /* FIX ME: Change from Drive Controller to Game Controller*/
+    console.getGameBButton().whenHeld(new CloseHand(hand, lights)); /* FIX ME: Change from Drive Controller to Game Controller*/
 
-    console.getDriveRightBumber().whenPressed(elbow::extendShoulder, elbow);
-    console.getDriveYButton().whenPressed(elbow::retractShoulder, elbow);
+    console.getDriveRightBumber().whenPressed(elbow::extendShoulder, elbow); /* FIX ME: Change from Drive Controller to Game Controller*/
+    console.getDriveLeftBumper().whenPressed(elbow::retractShoulder, elbow); /* FIX ME: Change from Drive Controller to Game Controller*/
   }
 
   /**

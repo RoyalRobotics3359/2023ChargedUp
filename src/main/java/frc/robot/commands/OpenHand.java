@@ -6,21 +6,18 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Lights;
-import frc.robot.OperatorConsole;
 import frc.robot.subsystems.Hand;
 
 public class OpenHand extends CommandBase {
 
   private Hand hand;
 
-  private OperatorConsole console;
-
   private Lights leds;
+
   /** Creates a new ControlHand. */
-  public OpenHand(Hand h, OperatorConsole oc, Lights l) {
+  public OpenHand(Hand h, Lights l) {
 
     hand = h;
-    console = oc;
     leds = l;
     
     // Use addRequirements() here to declare subsystem dependencies.

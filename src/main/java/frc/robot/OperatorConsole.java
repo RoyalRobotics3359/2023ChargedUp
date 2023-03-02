@@ -233,7 +233,7 @@ public class OperatorConsole {
         return Game_Left_Bumper;
     }
 
-    public JoystickButton getGameRightBumber() {
+    public JoystickButton getGameRightBumper() {
         return Game_Right_Bumper;
     }
 

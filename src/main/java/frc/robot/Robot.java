@@ -13,7 +13,12 @@ import frc.robot.commands.OpenHand;
 import frc.robot.commands.OperateElbow;
 import frc.robot.commands.CloseHand;
 import frc.robot.commands.JoystickDrive;
+import frc.robot.commands.LowerElbow;
+import frc.robot.commands.LowerWrist;
 import frc.robot.commands.OperateLift;
+import frc.robot.commands.OperateWrist;
+import frc.robot.commands.RaiseElbow;
+import frc.robot.commands.RaiseWrist;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elbow;
 import frc.robot.subsystems.Hand;
@@ -42,6 +47,8 @@ public class Robot extends TimedRobot {
   private Wrist wrist;
 
   //  Commands
+  private RaiseElbow raiseElbow;
+  private LowerElbow lowerElbow;
 
   //  Other
   private Lights lights;
@@ -62,6 +69,8 @@ public class Robot extends TimedRobot {
     wrist = new Wrist();
 
     // Commands
+    // raiseElbow = new RaiseElbow(elbow);
+    // lowerElbow = new LowerElbow(elbow);
 
     // Other
     camera = new Camera();
@@ -77,11 +86,16 @@ public class Robot extends TimedRobot {
 
     CommandScheduler.getInstance().setDefaultCommand(elbow, new OperateElbow(elbow, console));
 
-    console.getGameAButton().whenHeld(new OpenHand(hand, lights)); /* FIX ME: Change from Drive Controller to Game Controller*/
-    console.getGameBButton().whenHeld(new CloseHand(hand, lights)); /* FIX ME: Change from Drive Controller to Game Controller*/
+    CommandScheduler.getInstance().setDefaultCommand(wrist, new OperateWrist(wrist, console));
 
-    console.getDriveRightBumber().whenPressed(elbow::extendShoulder, elbow); /* FIX ME: Change from Drive Controller to Game Controller*/
-    console.getDriveLeftBumper().whenPressed(elbow::retractShoulder, elbow); /* FIX ME: Change from Drive Controller to Game Controller*/
+    console.getGameAButton().whenHeld(new OpenHand(hand, lights));
+    console.getGameBButton().whenHeld(new CloseHand(hand, lights));
+
+    console.getGameXButton().whenPressed(elbow::extendShoulder, elbow);
+    console.getGameYButton().whenPressed(elbow::retractShoulder, elbow);
+
+    console.getGameLeftBumper().whenHeld(new LowerWrist(wrist));
+    console.getGameRightBumper().whenHeld(new RaiseWrist(wrist));
   }
 
   /**
@@ -137,7 +151,15 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    
+    // if (console.getDriveRightTrigger() == true) {
+    //   raiseElbow.execute();
+    // } else if (console.getGameRightTrigger() == true) {
+    //   lowerElbow.execute();
+    // } else {
+    //   raiseElbow.end(true);
+    //   lowerElbow.end(true);
+    // }
+
     CommandScheduler.getInstance().run();
   }
 

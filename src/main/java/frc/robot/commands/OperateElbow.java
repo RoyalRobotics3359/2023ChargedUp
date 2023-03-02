@@ -18,6 +18,7 @@ public class OperateElbow extends CommandBase {
   public OperateElbow(Elbow e, OperatorConsole oc) {
 
     elbow = e;
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elbow);
   }
@@ -29,9 +30,9 @@ public class OperateElbow extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (console.getDriveLeftStickY() != 0.0 && console.getDriveLeftStickY() > 0.0) {
+    if (console.getGameLeftStickY() != 0.0 && console.getGameLeftStickY() > 0.0) {
       elbow.rotateUp();
-    } else if (console.getDriveLeftStickY() != 0.0 && console.getDriveLeftStickY() < 0.0){
+    } else if (console.getGameLeftStickY() != 0.0 && console.getGameLeftStickY() < 0.0){
       elbow.rotateDown();
     } else {
       elbow.motorStop();

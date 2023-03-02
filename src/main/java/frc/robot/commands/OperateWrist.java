@@ -6,22 +6,21 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OperatorConsole;
-import frc.robot.subsystems.Lift;
+import frc.robot.subsystems.Wrist;
 
-public class OperateLift extends CommandBase {
+public class OperateWrist extends CommandBase {
 
-  private Lift lift;
-
+  private Wrist wrist;
   private OperatorConsole console;
-  
-  /** Creates a new OperateLift. */
-  public OperateLift(Lift l, OperatorConsole oc) {
 
-    lift = l;
+  /** Creates a new OperateWrist. */
+  public OperateWrist(Wrist w, OperatorConsole oc) {
+
+    wrist = w;
     console = oc;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(lift);
+    addRequirements(wrist);
   }
 
   // Called when the command is initially scheduled.
@@ -31,20 +30,18 @@ public class OperateLift extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (console.getGameDpadAngle() == 0 /* FIX ME: Change from Drive Controller to Game Controller*/) {
-      lift.extendLift();
-    } else if (console.getGameDpadAngle() == 180 /* FIX ME: Change from Drive Controller to Game Controller*/) {
-      lift.retractLift();
+    if (console.getGameRightStickY() != 0.0 && console.getGameRightStickY() > 0.0) {
+      wrist.rotateUp();
+    } else if (console.getGameRightStickY() != 0.0 && console.getGameRightStickY() < 0.0){
+      wrist.rotateDown();
     } else {
-      lift.motorStop();
+      wrist.motorStop();
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    lift.motorStop();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

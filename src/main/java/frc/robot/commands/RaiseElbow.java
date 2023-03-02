@@ -5,23 +5,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.OperatorConsole;
-import frc.robot.subsystems.Lift;
+import frc.robot.subsystems.Elbow;
 
-public class OperateLift extends CommandBase {
+public class RaiseElbow extends CommandBase {
 
-  private Lift lift;
-
-  private OperatorConsole console;
+  private Elbow elbow;
   
-  /** Creates a new OperateLift. */
-  public OperateLift(Lift l, OperatorConsole oc) {
+  /** Creates a new RaiseElbow. */
+  public RaiseElbow(Elbow e) {
 
-    lift = l;
-    console = oc;
+    elbow = e;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(lift);
+    addRequirements(elbow);
   }
 
   // Called when the command is initially scheduled.
@@ -31,19 +27,13 @@ public class OperateLift extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (console.getGameDpadAngle() == 0 /* FIX ME: Change from Drive Controller to Game Controller*/) {
-      lift.extendLift();
-    } else if (console.getGameDpadAngle() == 180 /* FIX ME: Change from Drive Controller to Game Controller*/) {
-      lift.retractLift();
-    } else {
-      lift.motorStop();
-    }
+    elbow.rotateUp();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    lift.motorStop();
+    elbow.motorStop();
   }
 
   // Returns true when the command should end.

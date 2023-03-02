@@ -36,7 +36,7 @@ public class Wrist extends SubsystemBase {
   }
 
   public void rotateDown() {
-    wristMotor.set(TalonSRXControlMode.PercentOutput, Constants.Speeds.wristSpeed.getSpeed()); /* FIX ME */
+    wristMotor.set(TalonSRXControlMode.PercentOutput, -1.0 * Constants.Speeds.wristSpeed.getSpeed()); /* FIX ME */
   }
 
   public void motorStop() {

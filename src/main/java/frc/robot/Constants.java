@@ -16,10 +16,10 @@ public final class Constants {
 
   public enum Motors {
     /* Motor(CAN_ID, isReversed) */
-    leftFront(1,false), /* FIX ME */
-    leftBack(2,false), /* FIX ME */
-    rightFront(3,true), /* FIX ME */
-    rightBack(4,true), /* FIX ME */
+    leftFront(3,false), /* FIX ME */
+    leftBack(4,false), /* FIX ME */
+    rightFront(1,true), /* FIX ME */
+    rightBack(2,true), /* FIX ME */
     handMotor(5,false), /* FIX ME */
     liftMotor(6, false), /* FIX ME */
     wristMotor(7,false), /* FIX ME */

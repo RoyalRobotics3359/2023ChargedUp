@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.OpenHand;
+import frc.robot.commands.OperateElbow;
 import frc.robot.commands.CloseHand;
 import frc.robot.commands.JoystickDrive;
 import frc.robot.commands.OperateLift;
@@ -73,6 +74,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().setDefaultCommand(drive, new JoystickDrive(drive, console));
 
     CommandScheduler.getInstance().setDefaultCommand(lift, new OperateLift(lift, console));
+
+    CommandScheduler.getInstance().setDefaultCommand(elbow, new OperateElbow(elbow, console));
 
     console.getGameAButton().whenHeld(new OpenHand(hand, lights)); /* FIX ME: Change from Drive Controller to Game Controller*/
     console.getGameBButton().whenHeld(new CloseHand(hand, lights)); /* FIX ME: Change from Drive Controller to Game Controller*/

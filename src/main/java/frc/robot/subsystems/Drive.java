@@ -23,18 +23,15 @@ public class Drive extends SubsystemBase {
 
   private DifferentialDrive drive;
 
-  // private RelativeEncoder leftEncoder;
-  // private RelativeEncoder rightEncoder;
-
   private MotorControllerGroup leftMotors;
   private MotorControllerGroup rightMotors;
   
   /** Creates a new Drive. */
   public Drive() {
-    frontLeft = new CANSparkMax(Constants.Motors.leftFront.getCAN_ID(), MotorType.kBrushless);
-    backLeft = new CANSparkMax(Constants.Motors.leftBack.getCAN_ID(), MotorType.kBrushless);
-    frontRight = new CANSparkMax(Constants.Motors.rightFront.getCAN_ID(), MotorType.kBrushless);
-    backRight = new CANSparkMax(Constants.Motors.rightBack.getCAN_ID(), MotorType.kBrushless);
+    frontLeft = new CANSparkMax(Constants.Motors.leftFront.getCAN_ID(), MotorType.kBrushed);
+    backLeft = new CANSparkMax(Constants.Motors.leftBack.getCAN_ID(), MotorType.kBrushed);
+    frontRight = new CANSparkMax(Constants.Motors.rightFront.getCAN_ID(), MotorType.kBrushed);
+    backRight = new CANSparkMax(Constants.Motors.rightBack.getCAN_ID(), MotorType.kBrushed);
 
     frontLeft.restoreFactoryDefaults();
     backLeft.restoreFactoryDefaults();

@@ -94,8 +94,8 @@ public class Robot extends TimedRobot {
     console.getGameXButton().whenPressed(elbow::extendShoulder, elbow);
     console.getGameYButton().whenPressed(elbow::retractShoulder, elbow);
 
-    console.getGameLeftBumper().whenHeld(new LowerWrist(wrist));
-    console.getGameRightBumper().whenHeld(new RaiseWrist(wrist));
+    // console.getGameLeftBumper().whenHeld(new LowerWrist(wrist));
+    // console.getGameRightBumper().whenHeld(new RaiseWrist(wrist));
   }
 
   /**

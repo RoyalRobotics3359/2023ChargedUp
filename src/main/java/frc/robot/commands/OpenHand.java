@@ -12,13 +12,11 @@ public class OpenHand extends CommandBase {
 
   private Hand hand;
 
-  private Lights leds;
-
   /** Creates a new ControlHand. */
-  public OpenHand(Hand h, Lights l) {
+  public OpenHand(Hand h) {
 
     hand = h;
-    leds = l;
+    // leds = l;
     
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(hand);
@@ -32,7 +30,7 @@ public class OpenHand extends CommandBase {
   @Override
   public void execute() {
     hand.openHand();
-    leds.setColorRed();
+    // leds.setColorRed();
   }
 
   // Called once the command ends or is interrupted.

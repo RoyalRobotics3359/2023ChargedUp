@@ -18,6 +18,7 @@ public class RaiseWrist extends CommandBase {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(wrist);
+    
   }
 
   // Called when the command is initially scheduled.

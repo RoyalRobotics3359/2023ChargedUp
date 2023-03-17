@@ -20,12 +20,12 @@ public class Hand extends SubsystemBase {
   private CANSparkMax handMotor;
   private RelativeEncoder handEncoder;
 
-  private Lights lights;
+  // private Lights lights;
 
   /** Creates a new Hand. */
-  public Hand(Lights l) {
+  public Hand(/*Lights l*/) {
 
-    lights = l;
+    // lights = l;
 
     handMotor = new CANSparkMax(Constants.Motors.handMotor.getCAN_ID(), MotorType.kBrushless);
 
@@ -47,18 +47,17 @@ public class Hand extends SubsystemBase {
 
   public void openHand() {
     handMotor.set(Constants.Speeds.handSpeed.getSpeed());
-    System.out.println("Hand.openHand() Encoder: " + handEncoder.getPosition());
+    // System.out.println("Hand.openHand() Encoder: " + handEncoder.getPosition());
   }
 
   public void closeHand() {
     handMotor.set(-1.0 * Constants.Speeds.handSpeed.getSpeed());
-    System.out.println("Hand.closeHand() Encoder: " + handEncoder.getPosition());
+    // System.out.println("Hand.closeHand() Encoder: " + handEncoder.getPosition());
   }
 
   public void motorStop() {
     handMotor.set(0.0);
-    lights.setColorPurple();
-    System.out.println("Hand.motorStop()");
+    // lights.setColorPurple();
   }
 
   public double getEncoderValue() {

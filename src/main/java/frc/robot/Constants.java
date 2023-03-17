@@ -16,14 +16,22 @@ public final class Constants {
 
   public enum Motors {
     /* Motor(CAN_ID, isReversed) */
-    leftFront(3,false), /* FIX ME */
-    leftBack(4,false), /* FIX ME */
-    rightFront(1,true), /* FIX ME */
-    rightBack(2,true), /* FIX ME */
-    handMotor(5,false), /* FIX ME */
-    liftMotor(6, false), /* FIX ME */
-    wristMotor(7,false), /* FIX ME */
-    elbowMotor(8, false); /* FIX ME */
+    // leftFront(3,true), /* FIX ME  */
+    // leftBack(4,true), /* FIX ME */
+    // rightFront(1,false), /* FIX ME */
+    // rightBack(2,false), /* FIX ME */
+    leftFront(3,false), /* TEST  */
+    leftBack(4,false), /* TEST */
+    rightFront(2,true), /* TEST */
+    rightBack(1,true), /* TEST */
+
+    // handMotor(5,false),
+    handMotor(6,false),
+
+    liftMotor(9, false), 
+    wristMotor(7,true), 
+    elbowMotor1(8, false), /* FIX ME */
+    elbowMotor2(6,true); /* FIX ME */
 
     private final int CAN_ID;
     private final boolean isReversed;
@@ -43,11 +51,11 @@ public final class Constants {
   }
 
   public enum Speeds {
-    maxDriveSpeed(0.7),
-    liftSpeed(0.4), /* FIX ME */
-    handSpeed(0.15),
-    wristSpeed(0.0), /* FIX ME */
-    elbowSpeed(0.0); /* FIX ME */
+    maxDriveSpeed(0.6),
+    liftSpeed(0.6), /* FIX ME */
+    handSpeed(0.50),
+    wristSpeed(0.35), /* FIX ME */
+    elbowSpeed(1.0); /* FIX ME */
 
     private final double speed;
 
@@ -121,4 +129,6 @@ public final class Constants {
   public final static int CAMERA_BRIGHTNESS = 50;
 
   public final static int CAMERA_FPS = 15;
+
+  public final static double MAX_RPM_FOR_DRIVE = 495.798319;
 }

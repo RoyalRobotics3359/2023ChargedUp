@@ -5,15 +5,20 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /** Add your docs here. */
 public class OperatorConsole {
 
     private XboxController driveController, gameController;
 
-    private JoystickButton Drive_A_Button, Drive_B_Button, Drive_X_Button, Drive_Y_Button, Drive_Start_Button, Drive_Back_Button, Drive_Left_Bumper, Drive_Right_Bumper;
-    private JoystickButton Game_A_Button, Game_B_Button, Game_X_Button, Game_Y_Button, Game_Start_Button, Game_Back_Button, Game_Left_Bumper, Game_Right_Bumper;
+    // private JoystickButton Drive_A_Button, Drive_B_Button, Drive_X_Button, Drive_Y_Button, Drive_Start_Button, Drive_Back_Button, Drive_Left_Bumper, Drive_Right_Bumper;
+    private Trigger Drive_A_Button, Drive_B_Button, Drive_X_Button, Drive_Y_Button, Drive_Start_Button, Drive_Back_Button, Drive_Left_Bumper, Drive_Right_Bumper;
+
+    // private JoystickButton Game_A_Button, Game_B_Button, Game_X_Button, Game_Y_Button, Game_Start_Button, Game_Back_Button, Game_Left_Bumper, Game_Right_Bumper;
+    private Trigger Game_A_Button, Game_B_Button, Game_X_Button, Game_Y_Button, Game_Start_Button, Game_Back_Button, Game_Left_Bumper, Game_Right_Bumper;
 
     // This constructor has the parameter for the Controller Id a.k.a. its port
     public OperatorConsole() {
@@ -109,35 +114,67 @@ public class OperatorConsole {
         return isActive;
     }
 
-    public JoystickButton getDriveAButton() {
+    // public JoystickButton getDriveAButton() {
+    //     return Drive_A_Button;
+    // }
+
+    // public JoystickButton getDriveBButton() {
+    //     return Drive_B_Button;
+    // }
+
+    // public JoystickButton getDriveXButton() {
+    //     return Drive_X_Button;
+    // }
+
+    // public JoystickButton getDriveYButton() {
+    //     return Drive_Y_Button;
+    // }
+
+    // public JoystickButton getDriveStartButton() {
+    //     return Drive_Start_Button;
+    // }
+
+    // public JoystickButton getDriveBackButton() {
+    //     return Drive_Back_Button;
+    // }
+
+    // public JoystickButton getDriveLeftBumper() {
+    //     return Drive_Left_Bumper;
+    // }
+
+    // public JoystickButton getDriveRightBumber() {
+    //     return Drive_Right_Bumper;
+    // }
+
+    public Trigger getDriveAButton() {
         return Drive_A_Button;
     }
 
-    public JoystickButton getDriveBButton() {
+    public Trigger getDriveBButton() {
         return Drive_B_Button;
     }
 
-    public JoystickButton getDriveXButton() {
+    public Trigger getDriveXButton() {
         return Drive_X_Button;
     }
 
-    public JoystickButton getDriveYButton() {
+    public Trigger getDriveYButton() {
         return Drive_Y_Button;
     }
 
-    public JoystickButton getDriveStartButton() {
+    public Trigger getDriveStartButton() {
         return Drive_Start_Button;
     }
 
-    public JoystickButton getDriveBackButton() {
+    public Trigger getDriveBackButton() {
         return Drive_Back_Button;
     }
 
-    public JoystickButton getDriveLeftBumper() {
+    public Trigger getDriveLeftBumper() {
         return Drive_Left_Bumper;
     }
 
-    public JoystickButton getDriveRightBumber() {
+    public Trigger getDriveRightBumber() {
         return Drive_Right_Bumper;
     }
 
@@ -190,7 +227,7 @@ public class OperatorConsole {
     public boolean getGameLeftTrigger() {
         boolean isActive = false;
         double gameLeftTriggerVal = gameController.getRawAxis(XboxController.Axis.kLeftTrigger.value);
-        if (gameLeftTriggerVal > Constants.CONTROLLER_TRIGGER_DEADBAND) {
+        if (gameLeftTriggerVal > 0.0) {
             isActive = true;
         }
         return isActive;
@@ -199,42 +236,73 @@ public class OperatorConsole {
     public boolean getGameRightTrigger() {
         boolean isActive = false;
         double gameRightTriggerVal = gameController.getRawAxis(XboxController.Axis.kRightTrigger.value);
-        if (gameRightTriggerVal > Constants.CONTROLLER_TRIGGER_DEADBAND) {
+        if (gameRightTriggerVal > 0.0) {
             isActive = true;
         }
         return isActive;
     }
 
-    public JoystickButton getGameAButton() {
+    // public JoystickButton getGameAButton() {
+    //     return Game_A_Button;
+    // }
+
+    // public JoystickButton getGameBButton() {
+    //     return Game_B_Button;
+    // }
+
+    // public JoystickButton getGameXButton() {
+    //     return Game_X_Button;
+    // }
+
+    // public JoystickButton getGameYButton() {
+    //     return Game_Y_Button;
+    // }
+
+    // public JoystickButton getGameStartButton() {
+    //     return Game_Start_Button;
+    // }
+
+    // public JoystickButton getGameBackButton() {
+    //     return Game_Back_Button;
+    // }
+
+    // public JoystickButton getGameLeftBumper() {
+    //     return Game_Left_Bumper;
+    // }
+
+    // public JoystickButton getGameRightBumper() {
+    //     return Game_Right_Bumper;
+    // }
+
+    public Trigger getGameAButton() {
         return Game_A_Button;
     }
 
-    public JoystickButton getGameBButton() {
+    public Trigger getGameBButton() {
         return Game_B_Button;
     }
 
-    public JoystickButton getGameXButton() {
+    public Trigger getGameXButton() {
         return Game_X_Button;
     }
 
-    public JoystickButton getGameYButton() {
+    public Trigger getGameYButton() {
         return Game_Y_Button;
     }
 
-    public JoystickButton getGameStartButton() {
+    public Trigger getGameStartButton() {
         return Game_Start_Button;
     }
 
-    public JoystickButton getGameBackButton() {
+    public Trigger getGameBackButton() {
         return Game_Back_Button;
     }
 
-    public JoystickButton getGameLeftBumper() {
+    public Trigger getGameLeftBumper() {
         return Game_Left_Bumper;
     }
 
-    public JoystickButton getGameRightBumper() {
+    public Trigger getGameRightBumper() {
         return Game_Right_Bumper;
     }
-
 }

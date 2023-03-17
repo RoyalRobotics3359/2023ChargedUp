@@ -6,12 +6,18 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.OpenHand;
 import frc.robot.commands.OperateElbow;
 import frc.robot.commands.CloseHand;
+import frc.robot.commands.ExtendShoulder;
 import frc.robot.commands.JoystickDrive;
 import frc.robot.commands.LowerElbow;
 import frc.robot.commands.LowerWrist;
@@ -19,6 +25,7 @@ import frc.robot.commands.OperateLift;
 import frc.robot.commands.OperateWrist;
 import frc.robot.commands.RaiseElbow;
 import frc.robot.commands.RaiseWrist;
+import frc.robot.commands.RetractShoulder;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elbow;
 import frc.robot.subsystems.Hand;
@@ -40,7 +47,6 @@ public class Robot extends TimedRobot {
 
   // Subsytems
   private Drive drive;
-  private OperatorConsole console;
   private Lift lift;
   private Hand hand;
   private Elbow elbow;
@@ -51,9 +57,15 @@ public class Robot extends TimedRobot {
   private LowerElbow lowerElbow;
 
   //  Other
+  private OperatorConsole console;
+  private RobotContainer container;
   private Lights lights;
   private Camera camera;
   private Compressor compressor;
+  private SendableChooser<Command> chooser;
+  private Command autonomousCommand;
+
+  private Servo gripperTest;
 
   @Override
   public void robotInit() {
@@ -62,40 +74,48 @@ public class Robot extends TimedRobot {
 
     // Subsystems
     drive = new Drive();
-    console = new OperatorConsole();
     lift = new Lift();
-    hand = new Hand(lights);
+    hand = new Hand(/*lights*/);
     elbow = new Elbow();
-    wrist = new Wrist();
+    // wrist = new Wrist();
 
     // Commands
-    // raiseElbow = new RaiseElbow(elbow);
-    // lowerElbow = new LowerElbow(elbow);
+    raiseElbow = new RaiseElbow(elbow);
+    lowerElbow = new LowerElbow(elbow);
+    // autonomousCommand = new DriveForwardTimedDrive(drive, 2.0, 0.7);
+    // defaultAutonomousCommand = new DriveForwardTimedDrive(drive, 2.0, 0.8);
 
     // Other
+    console = new OperatorConsole();
+    container = new RobotContainer(drive);
     camera = new Camera();
     compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     compressor.enableDigital();
-    lights = new Lights();
+    // lights = new Lights();
+    chooser = new SendableChooser<>();
+    gripperTest = new Servo(0);
+    // lights.setColorPurple();
 
-    lights.setColorPurple();
-
+    // Setting up basic functions of all subsytems
     CommandScheduler.getInstance().setDefaultCommand(drive, new JoystickDrive(drive, console));
 
     CommandScheduler.getInstance().setDefaultCommand(lift, new OperateLift(lift, console));
 
-    CommandScheduler.getInstance().setDefaultCommand(elbow, new OperateElbow(elbow, console));
+    // CommandScheduler.getInstance().setDefaultCommand(elbow, new OperateElbow(elbow, console));
 
-    CommandScheduler.getInstance().setDefaultCommand(wrist, new OperateWrist(wrist, console));
+    // CommandScheduler.getInstance().setDefaultCommand(wrist, new OperateWrist(wrist, console));
 
-    console.getGameAButton().whenHeld(new OpenHand(hand, lights));
-    console.getGameBButton().whenHeld(new CloseHand(hand, lights));
+    console.getGameAButton().whileTrue(new OpenHand(hand));
+    console.getGameBButton().whileTrue(new CloseHand(hand));
 
-    console.getGameXButton().whenPressed(elbow::extendShoulder, elbow);
-    console.getGameYButton().whenPressed(elbow::retractShoulder, elbow);
+    // console.getGameXButton().whenPressed(elbow::extendShoulder, elbow);
+    // console.getGameYButton().whenPressed(elbow::retractShoulder, elbow);
 
-    // console.getGameLeftBumper().whenHeld(new LowerWrist(wrist));
-    // console.getGameRightBumper().whenHeld(new RaiseWrist(wrist));
+    console.getGameYButton().whileTrue(new ExtendShoulder(elbow));
+    console.getGameXButton().whileTrue(new RetractShoulder(elbow));
+
+    // console.getGameLeftBumper().whileTrue(new LowerWrist(wrist));
+    // console.getGameRightBumper().whileTrue(new RaiseWrist(wrist));
   }
 
   /**
@@ -110,8 +130,13 @@ public class Robot extends TimedRobot {
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
+    // block in order for anything in the Command-based framework to work.  
     CommandScheduler.getInstance().run();
+
+    SmartDashboard.putNumber("Drive LeftStickY", console.getDriveLeftStickY());
+    SmartDashboard.putNumber("Game LeftStickY", console.getGameLeftStickY());
+
+    SmartDashboard.putNumber("Commpresor PSI", compressor.getPressure());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -124,17 +149,25 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // // schedule the autonomous command (example)
     // if (m_autonomousCommand != null) {
     //   m_autonomousCommand.schedule();
     // }
+
+    // Setting up autonomous
+    autonomousCommand = container.getAutonomousRoutine();
+
+    if (autonomousCommand != null) {
+      autonomousCommand.schedule();
+    }
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    CommandScheduler.getInstance().run();
+  }
 
   @Override
   public void teleopInit() {
@@ -145,20 +178,66 @@ public class Robot extends TimedRobot {
     // if (m_autonomousCommand != null) {
     //   m_autonomousCommand.cancel();
     // }
+
+    if (autonomousCommand != null) {
+      autonomousCommand.cancel();
+    }
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
 
-    // if (console.getDriveRightTrigger() == true) {
-    //   raiseElbow.execute();
-    // } else if (console.getGameRightTrigger() == true) {
-    //   lowerElbow.execute();
-    // } else {
-    //   raiseElbow.end(true);
-    //   lowerElbow.end(true);
+    // /**
+    //  * Quick and dirty servo gripper test
+    //  */
+    // int dpad = console.getDriveDpadAngle();
+    // System.out.println("D-Pad angle: " + dpad + ", servo: " + gripperTest.getPosition() + ", " + gripperTest.getAngle());
+    // if (dpad == 90) {
+    //   gripperTest.setAngle(0.03);
+    //   System.out.print("+");
     // }
+    // else if (dpad == 270) {
+    //   gripperTest.setAngle(0.05));
+    //   System.out.print("-");
+    // }
+
+
+    if (console.getGameRightTrigger() == true) {
+      lowerElbow.end(true);
+      raiseElbow.execute();
+      SmartDashboard.putBoolean("Elbow Retracting", true);
+      SmartDashboard.putBoolean("Elbow Extending", false);
+      SmartDashboard.putBoolean("Elbow Stopped", false);
+      System.out.println("executing raise");
+    } else if (console.getGameLeftTrigger() == true) {
+      raiseElbow.end(true);
+      lowerElbow.execute();
+      SmartDashboard.putBoolean("Elbow Retracting", false);
+      SmartDashboard.putBoolean("Elbow Extending", true);
+      SmartDashboard.putBoolean("Elbow Stopped", false);
+      System.out.println("executing lower");
+    } else {
+      raiseElbow.end(true);
+      lowerElbow.end(true);
+      SmartDashboard.putBoolean("Elbow Retracting", false);
+      SmartDashboard.putBoolean("Elbow Extending", false);
+      SmartDashboard.putBoolean("Elbow Stopped", true);
+    }
+
+    if (console.getGameLeftBumper().getAsBoolean() == true && console.getGameRightBumper().getAsBoolean() == false) {
+      SmartDashboard.putBoolean("Wrist Extending", true);
+      SmartDashboard.putBoolean("Wrist Retracting", false);
+      SmartDashboard.putBoolean("Wrist Stopped", false);    
+    } else if (console.getGameRightBumper().getAsBoolean() == true && console.getGameLeftBumper().getAsBoolean() == false) {
+      SmartDashboard.putBoolean("Wrist Extending", false);
+      SmartDashboard.putBoolean("Wrist Retracting", true);
+      SmartDashboard.putBoolean("Wrist Stopped", false);
+    } else {
+      SmartDashboard.putBoolean("Wrist Extending", false);
+      SmartDashboard.putBoolean("Wrist Retracting", false);
+      SmartDashboard.putBoolean("Wrist Stopped", true);
+    }
 
     CommandScheduler.getInstance().run();
   }

@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.OperatorConsole;
@@ -19,6 +20,8 @@ public class OperateElbow extends CommandBase {
 
     elbow = e;
 
+    console = oc;
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elbow);
   }
@@ -30,13 +33,25 @@ public class OperateElbow extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (console.getGameLeftStickY() != 0.0 && console.getGameLeftStickY() > 0.0) {
-      elbow.rotateUp();
-    } else if (console.getGameLeftStickY() != 0.0 && console.getGameLeftStickY() < 0.0){
-      elbow.rotateDown();
-    } else {
-      elbow.motorStop();
+    // if (console.getGameLeftStickY() != 0.0 && console.getGameLeftStickY() > 0.0) {
+    //   elbow.rotateUp();
+    // } else if (console.getGameLeftStickY() != 0.0 && console.getGameLeftStickY() < 0.0){
+    //   elbow.rotateDown();
+    // } else {
+    //   elbow.motorStop();
+    // }
+
+    if (console.getGameLeftStickY() != 0.0) {
+      if (console.getGameLeftStickY() > 0.0) {
+        elbow.rotateUp();
+      } else if (console.getGameLeftStickY() < 0.0){
+        elbow.rotateDown();
+      } else {
+        elbow.motorStop();
+      }
     }
+    
+    SmartDashboard.putString("Shoulder State", elbow.getShoulderState());
   }
 
   // Called once the command ends or is interrupted.

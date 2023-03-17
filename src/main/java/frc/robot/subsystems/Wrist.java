@@ -24,6 +24,7 @@ public class Wrist extends SubsystemBase {
     wristMotor.setInverted(Constants.Motors.wristMotor.isReversed());
 
     wristMotor.setNeutralMode(NeutralMode.Brake);
+    
   }
 
   @Override
@@ -31,12 +32,22 @@ public class Wrist extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void rotateUp() {
+  public void rotateDown() {
     wristMotor.set(TalonSRXControlMode.PercentOutput, Constants.Speeds.wristSpeed.getSpeed()); /* FIX ME */
   }
 
-  public void rotateDown() {
+  public void rotateUp() {
     wristMotor.set(TalonSRXControlMode.PercentOutput, -1.0 * Constants.Speeds.wristSpeed.getSpeed()); /* FIX ME */
+  }
+
+  public void controlWrist(double direction) {
+    if (direction > 0.0) {
+      wristMotor.set(TalonSRXControlMode.PercentOutput, Constants.Speeds.wristSpeed.getSpeed()); /* FIX ME */
+    }
+
+    if (direction < 0.0) {
+      wristMotor.set(TalonSRXControlMode.PercentOutput, -1.0 * Constants.Speeds.wristSpeed.getSpeed()); /* FIX ME */
+    }
   }
 
   public void motorStop() {

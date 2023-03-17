@@ -22,6 +22,7 @@ public class OperateLift extends CommandBase {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(lift);
+    
   }
 
   // Called when the command is initially scheduled.

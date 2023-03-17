@@ -4,46 +4,62 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Lights;
-import frc.robot.subsystems.Hand;
+import frc.robot.Constants;
+import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Elbow;
 
-public class CloseHand extends CommandBase {
+public class ComplexAuto extends CommandBase {
+  
+  private Drive drive;
 
-  private Hand hand;
+  private double seconds;
 
-  // private Lights leds;
+  private double power;
 
-  /** Creates a new CloseHand. */
-  public CloseHand(Hand h) {
+  private Timer timer;
 
-    hand = h;
-    // leds = l;
+  /** Creates a new AutonomousCommand. */
+  public ComplexAuto(Drive d) {
 
+    timer = new Timer();
+
+    drive = d;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(hand);
+    addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if (timer == null) {
+      timer = new Timer();
+    }
+    timer.start();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    hand.closeHand();
-    // leds.setColorGreen();
+    // elbow.extendShoulder();
+    drive.setVoltage(power * Constants.MAX_VOLTAGE, power * Constants.MAX_VOLTAGE);
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    hand.motorStop();
+    timer.stop();
+    drive.motorStop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (timer.get() >= seconds) {
+      return true;
+    }
     return false;
   }
 }

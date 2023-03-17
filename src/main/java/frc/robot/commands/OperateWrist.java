@@ -13,6 +13,8 @@ public class OperateWrist extends CommandBase {
   private Wrist wrist;
   private OperatorConsole console;
 
+  private double power;
+
   /** Creates a new OperateWrist. */
   public OperateWrist(Wrist w, OperatorConsole oc) {
 
@@ -30,18 +32,25 @@ public class OperateWrist extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (console.getGameRightStickY() != 0.0 && console.getGameRightStickY() > 0.0) {
-      wrist.rotateUp();
-    } else if (console.getGameRightStickY() != 0.0 && console.getGameRightStickY() < 0.0){
-      wrist.rotateDown();
-    } else {
-      wrist.motorStop();
-    }
+    // if (console.getGameRightStickY() != 0.0 && console.getGameRightStickY() > 0.0) {
+    //   wrist.rotateUp();
+    // } else if (console.getGameRightStickY() != 0.0 && console.getGameRightStickY() < 0.0){
+    //   wrist.rotateDown();
+    // } else {
+    //   wrist.motorStop();
+    // }
+
+    power = console.getDriveRightStickY();
+
+    wrist.controlWrist(power);
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    wrist.motorStop();
+  }
 
   // Returns true when the command should end.
   @Override
